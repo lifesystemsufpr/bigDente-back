@@ -1,0 +1,9 @@
+node_modules/
+.pnpm-store/
+dist/
+coverage/
+src/generated/
+.env
+*.log
+.idea/
+.vscode/
