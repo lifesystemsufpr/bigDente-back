@@ -18,6 +18,7 @@ model User {
   name     String
   email    String   @unique
   password String
+  refreshTokenHash String?  @map("refresh_token_hash")
   role     Role
   student  Student?
 
