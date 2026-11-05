@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { randomBytes, scrypt } from 'node:crypto';
+import { randomBytes, scrypt, timingSafeEqual } from 'node:crypto';
 
 @Injectable()
 export class PasswordService {
@@ -8,6 +8,22 @@ export class PasswordService {
     const derivedKey = await this.deriveKey(password, salt);
 
     return `scrypt$${salt}$${derivedKey.toString('hex')}`;
+  }
+
+  async verify(password: string, storedHash: string): Promise<boolean> {
+    const [algorithm, salt, hashHex] = storedHash.split('$');
+    if (algorithm !== 'scrypt' || !salt || !hashHex) {
+      return false;
+    }
+
+    const expectedHash = Buffer.from(hashHex, 'hex');
+    if (expectedHash.length !== 64 || expectedHash.toString('hex') !== hashHex) {
+      return false;
+    }
+
+    const derivedKey = await this.deriveKey(password, salt);
+
+    return timingSafeEqual(derivedKey, expectedHash);
   }
 
   private deriveKey(password: string, salt: string): Promise<Buffer> {

@@ -5,6 +5,8 @@ import { AppController } from './app.controller';
 import { DatabaseModule } from './infrastructure/database/database.module';
 import { StudentsModule } from './modules/students/students.module';
 import { UsersModule } from './modules/users/users.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { AccountModule } from './modules/account/account.module';
 
 @Module({
   imports: [
@@ -17,11 +19,15 @@ import { UsersModule } from './modules/users/users.module';
           .default('development'),
         PORT: Joi.number().port().default(3000),
         DATABASE_URL: Joi.string().uri().required(),
+        JWT_ACCESS_SECRET: Joi.string().min(32).required(),
+        JWT_REFRESH_SECRET: Joi.string().min(32).required(),
       }),
     }),
     DatabaseModule,
     UsersModule,
     StudentsModule,
+    AuthModule,
+    AccountModule,
   ],
   controllers: [AppController],
 })
