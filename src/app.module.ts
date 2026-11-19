@@ -7,6 +7,7 @@ import { StudentsModule } from './modules/students/students.module';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AccountModule } from './modules/account/account.module';
+import { SterilizationModule } from './modules/sterilization/sterilization.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { AccountModule } from './modules/account/account.module';
     StudentsModule,
     AuthModule,
     AccountModule,
+    SterilizationModule
   ],
   controllers: [AppController],
 })

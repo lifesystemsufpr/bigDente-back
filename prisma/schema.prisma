@@ -33,5 +33,40 @@ model Student {
   userId    Int    @unique @map("user_id")
   user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  sterilizationUnits SterilizationUnit[]
+
   @@map("students")
+}
+
+enum SterilizationCase {
+  CASE
+  PACK
+} 
+
+enum SterilizationStatus {
+  PENDING
+  ERROR
+  SUBMITTED
+  COMPLETED
+  DELIVERED
+  CANCELLED
+}
+
+model SterilizationUnit {
+    id          String @id @default(uuid())
+    code        String @unique
+    student     Student @relation(fields: [studentId], references: [studentId], onDelete: Cascade) 
+    studentId   Int @map("student_id")
+    type        SterilizationCase
+
+    submittedForSterilizationAt        DateTime?
+    expectedSterilizationDeliveryAt    DateTime?
+    sterilizationDeliveredAt           DateTime?
+
+    status      SterilizationStatus   @default(PENDING)
+
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+
+    @@map("sterilization_cases")
 }
