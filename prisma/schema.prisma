@@ -53,20 +53,25 @@ enum SterilizationStatus {
 }
 
 model SterilizationUnit {
-    id          String @id @default(uuid())
-    code        String @unique
-    student     Student @relation(fields: [studentId], references: [studentId], onDelete: Cascade) 
-    studentId   Int @map("student_id")
-    type        SterilizationCase
+  id        String  @id @default(uuid())
+  code      String  @unique
+  student   Student @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+  studentId Int     @map("student_id")
+  type      SterilizationCase
 
-    submittedForSterilizationAt        DateTime?
-    expectedSterilizationDeliveryAt    DateTime?
-    sterilizationDeliveredAt           DateTime?
+  submittedForSterilizationAt     DateTime?
+  expectedSterilizationDeliveryAt DateTime?
+  sterilizationDeliveredAt        DateTime?
 
-    status      SterilizationStatus   @default(PENDING)
+  status      SterilizationStatus @default(PENDING)
+  errorReason String?             @map("error_reason")
 
-    createdAt   DateTime  @default(now())
-    updatedAt   DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@map("sterilization_cases")
+  @@index([studentId, status])
+  @@index([studentId, createdAt])
+  @@index([status])
+  @@index([expectedSterilizationDeliveryAt])
+  @@map("sterilization_units")
 }

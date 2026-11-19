@@ -53,11 +53,16 @@ export class SterilizationService {
       case S.SUBMITTED:
         data.submittedForSterilizationAt = now;
         data.expectedSterilizationDeliveryAt = new Date(now.getTime() + CYCLE_HOURS * 3600_000);
+        data.errorReason = null;
         break;
       case S.DELIVERED:
         data.sterilizationDeliveredAt = now;
         break;
-      case S.PENDING:
+      case S.ERROR:
+        data.errorReason = dto.errorReason;
+        break;
+      case S.PENDING: // retorno de ERROR: limpa o ciclo anterior
+        data.errorReason = null;
         data.submittedForSterilizationAt = null;
         data.expectedSterilizationDeliveryAt = null;
         break;
